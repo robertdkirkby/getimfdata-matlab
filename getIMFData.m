@@ -9,17 +9,22 @@ function [output] = getIMFData(database_id, series_id, countrycode2L, frequency,
 % find the series_id for a variable when you only have some idea what the
 % name might be.
 %
-% series_id:
-% For BOP (Balace of Payments), the list of 'series_id' is available
-% digging into: http://dataservices.imf.org/REST/SDMX_JSON.svc/DataStructure/BOP
-% For IFS (International Fiscal Statistics), the list of 'series_id' is available
-% digging into: http://dataservices.imf.org/REST/SDMX_JSON.svc/DataStructure/IFS 
-% For DOT (Balance of Trade), the list of 'series_id' is available
-% digging into: http://dataservices.imf.org/REST/SDMX_JSON.svc/DataStructure/DOT
+% series_id: the code for the variable you want
 %
 % frequency: for example monthly M, quarterly Q, or annually A;
+% 
+% I have deliberately made it so that the actual output is similar to that
+% from getFredData(). Especially that the dates and data are in output.Data
 %
-% series_id:
+% 2019
+% Robert Kirkby
+% robertdkirkby.com
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%     
+
+%%%%%
+%
+% Format of the request sent to the api:
 %   BOP: e.g., 'NZ. ' New Zealand 
 %   IFS: e.g., '
 %   DOT: e.g., 'IT. .FR'; Italy-France, 
@@ -35,48 +40,19 @@ function [output] = getIMFData(database_id, series_id, countrycode2L, frequency,
 %
 % http://dataservices.imf.org/REST/SDMX_JSON.svc/CompactData/DS-BOP/A.NZ.?startPeriod={start date}&endPeriod={end date}
 % http://dataservices.imf.org/REST/SDMX_JSON.svc/CodeList/{dimension_list[2]}
-
-% % Method: CompactData retrieves data, DataStructure retrieves series information, and GenericMetadata returns the metadata;
 %
-% http://dataservices.imf.org/REST/SDMX_JSON.svc/CompactData/{database ID}/{frequency}.{item1 from
-% dimension1}+{item2 from dimension1}+{item N from dimension1}.{item1 from
-% dimension2}+{item2 from dimension2}+{item M from dimension2}?startPeriod={start date}&endPeriod={end date}
+% Method: CompactData retrieves data, DataStructure retrieves series information, and GenericMetadata returns the metadata;
 %
 % Three websites I found useful to figure out the 'codes' for making a request
 % http://datahelp.imf.org/knowledgebase/articles/630877-api
 % http://datahelp.imf.org/knowledgebase/articles/667681-using-json-restful-web-service
 % http://dataservices.imf.org/REST/SDMX_JSON.svc/help
 %
-% For Balance of Payments data, the database ID is 'BOP' (database 81,
-% see full list of databases at
+% For Balance of Payments data, the database ID is 'BOP' (database 81, see full list of databases at
 % http://dataservices.imf.org/REST/SDMX_JSON.svc/Dataflow 
-% Use regular IMF website to find the name of the database, and then use
-% above link to find the relevant database ID code.
+% Use regular IMF website to find the name of the database, and then use above link to find the relevant database ID code.
 %
-% Returns the same format as you normally get accessing FRED using Matlab's 'fetch': 
-% Namely a structure with the following,
-%   'Title'
-%   'SeriesID'
-%   'Source'
-%   'Release'
-%   'SeasonalAdjustment'
-%   'Frequency'
-%   'Units'
-%   'DateRange'
-%   'LastUpdated'
-%   'Notes'             
-%   'Data'
-%
-% 2019
-% Robert Kirkby
-% robertdkirkby.com
-%
-% This product uses the FRED® API but is not endorsed or certified by 
-% the Federal Reserve Bank of St. Louis.  The terms of use can be found at
-% http://api.stlouisfed.org/terms_of_use.html
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%     
-
+%%%%%
 
 if nargin==1 % Just return a dictionary for that database
     % /DataStructure/
@@ -136,7 +112,7 @@ else % otherwise it is a structure
         output.Data(ii,2)=str2num(JSONdata.CompactData.DataSet.Series.Obs(ii).x_OBS_VALUE);
     end
 end
-output.IMFcodes.info='These codes are how IMF decribe the data series'; % To do this for more than just the BOP I really need to just do a read of the field names and then index through them
+output.IMFcodes.info='These codes are how IMF decribe the data series'; % To do this for more than just the BOP & IFS I really need to just do a read of the field names and then index through them
 output.IMFcodes.x_FREQ=JSONdata.CompactData.DataSet.Series.x_FREQ;
 output.IMFcodes.x_REF_AREA=JSONdata.CompactData.DataSet.Series.x_REF_AREA;
 output.IMFcodes.x_INDICATOR=JSONdata.CompactData.DataSet.Series.x_INDICATOR;
