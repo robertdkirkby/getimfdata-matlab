@@ -113,6 +113,18 @@ if nargin==1 % Just return a dictionary for that database
             output.TimeFormat{ii,2}=temp(ii).Description.x_text;
         end
     end
+    if strcmp(database_id,'DOT')
+        temp=JSONdata2.Structure.CodeLists.CodeList{5}.Code;
+        for ii=1:length(temp)
+            output.CouterpartCountry{ii,1}=temp(ii).x_value;
+            output.CouterpartCountry{ii,2}=temp(ii).Description.x_text;
+        end
+        temp=JSONdata2.Structure.CodeLists.CodeList{6}.Code;
+        for ii=1:length(temp)
+            output.TimeFormat{ii,1}=temp(ii).x_value;
+            output.TimeFormat{ii,2}=temp(ii).Description.x_text;
+        end
+    end
     return
 end
 
@@ -126,7 +138,7 @@ if strcmp(database_id,'IFS') || strcmp(database_id, 'BOP')
 elseif strcmp(database_id,'CPIS')
     optionstring=[frequency,'.',countrycode2L,'.',series_id,'.',sector_id,'.',counterpartysector_id,'.',counterpartycountrycode2L];
 elseif strcmp(database_id,'DOT')
-    fprintf('ERROR: I have not yet implemented for DOT database. If you have a use for this just email me: robertdkirkby@gmail.com and request/tell me to implement. \n')
+    optionstring=[frequency,'.',countrycode2L,'.',series_id,'.',counterpartycountrycode2L];
 end
 
 if nargin>4 % if specific start and end dates are given
@@ -170,9 +182,11 @@ output.series_id=JSONdata3.GenericMetadata.MetadataSet.AttributeValueSet(3).Repo
 output.description=JSONdata3.GenericMetadata.MetadataSet.AttributeValueSet(3).ReportedAttribute(2).ReportedAttribute(1).Value.x_text;
 if strcmp(database_id,'CPIS')
     output.sector=JSONdata3.GenericMetadata.MetadataSet.AttributeValueSet(4).ReportedAttribute(2).ReportedAttribute(1).Value.x_text;
-    output.counterpartysector=JSONdata3.GenericMetadata.MetadataSet.AttributeValueSet(5).ReportedAttribute(2).ReportedAttribute(1).Value.x_text;
-    output.counterparycountry=JSONdata3.GenericMetadata.MetadataSet.AttributeValueSet(6).ReportedAttribute(2).ReportedAttribute(1).Value.x_text;
+    output.counterpartsector=JSONdata3.GenericMetadata.MetadataSet.AttributeValueSet(5).ReportedAttribute(2).ReportedAttribute(1).Value.x_text;
+    output.counterpartcountry=JSONdata3.GenericMetadata.MetadataSet.AttributeValueSet(6).ReportedAttribute(2).ReportedAttribute(1).Value.x_text;
 end
-
+if strcmp(database_id,'DOT')
+    output.counterpartcountry=JSONdata3.GenericMetadata.MetadataSet.AttributeValueSet(4).ReportedAttribute(2).ReportedAttribute(1).Value.x_text;
+end
 
 end
