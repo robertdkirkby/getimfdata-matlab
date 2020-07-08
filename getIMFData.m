@@ -1,9 +1,10 @@
 function [output] = getIMFData(database_id, series_id, countrycode2L, frequency, observation_start, observation_end, counterpartycountrycode2L, sector_id, counterpartysector_id, vintage_id)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% database_id: currently supports 'BOP', 'IFS', 'DOT', 'CPIS'
+% database_id: currently supports 'BOP', 'IFS', 'DOT', 'CPIS', 'FSI'
 % [IMF datasets Balance of Payments (BOP), International Fiscal Statistics (IFS), 
-% Direction of Trade Statistics (DOT), and Coordinated Portfolio Investment Survey (CPIS).]
+% Direction of Trade Statistics (DOT), Coordinated Portfolio Investment Survey (CPIS),
+% and Financial Soundness Indicators (FSI).]
 %
 % If the only input is the database_id, then output will return a
 % dictionary of 'series_id' and their names. This can then be searched to
@@ -116,8 +117,8 @@ if nargin==1 % Just return a dictionary for that database
         output.Variables{ii,2}=temp(ii).Description.x_text;
     end
     % The above first four appear to always be the same, at least for BOP,
-    % IFS and CPIS. After the first four things are specific to the database being queried.
-    if strcmp(database_id,'IFS')
+    % IFS, CPIS and FSI. After the first four things are specific to the database being queried.
+    if strcmp(database_id,'IFS') || strcmp(database_id,'FSI')
         temp=JSONdata2.Structure.CodeLists.CodeList{5}.Code;
         for ii=1:length(temp)
             output.TimeFormat{ii,1}=temp(ii).x_value;
@@ -162,6 +163,11 @@ elseif strcmp(database_id,'CPIS')
     optionstring=[frequency,'.',countrycode2L,'.',series_id,'.',sector_id,'.',counterpartysector_id,'.',counterpartycountrycode2L];
 elseif strcmp(database_id,'DOT')
     optionstring=[frequency,'.',countrycode2L,'.',series_id,'.',counterpartycountrycode2L];
+elseif strcmp(database_id, 'FSI')
+    optionstring=[frequency,'.',countrycode2L,'.',series_id];
+    if nargin==7
+        optionstring=[frequency,'.',countrycode2L,'.',series_id,'.',timeformat];
+    end
 end
 
 if exist('observation_start','var')==1 && exist('observation_end','var')==1 % if specific start and end dates are given
