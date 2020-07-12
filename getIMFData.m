@@ -19,7 +19,7 @@ function [output] = getIMFData(database_id, series_id, countrycode2L, frequency,
 % given data for all available dates. Equivalently, set
 % observation_start=[], and similarly for observation_end=[].
 %
-% For BOP and IFS no further inputs are required. 
+% For BOP, FSI, IFS no further inputs are required. 
 %
 % Using CPIS you will need three further inputs:
 %   sector_id: see CPIS database for an explanation of Sectors
@@ -154,7 +154,7 @@ end
 
 
 % Not just database_id, so an actual data 'series_id' has been requested
-if strcmp(database_id,'IFS') || strcmp(database_id, 'BOP')
+if strcmp(database_id,'IFS') || strcmp(database_id, 'BOP') || strcmp(database_id, 'FSI')
     optionstring=[frequency,'.',countrycode2L,'.',series_id];
     if nargin==7
         optionstring=[frequency,'.',countrycode2L,'.',series_id,'.',timeformat];
@@ -163,11 +163,6 @@ elseif strcmp(database_id,'CPIS')
     optionstring=[frequency,'.',countrycode2L,'.',series_id,'.',sector_id,'.',counterpartysector_id,'.',counterpartycountrycode2L];
 elseif strcmp(database_id,'DOT')
     optionstring=[frequency,'.',countrycode2L,'.',series_id,'.',counterpartycountrycode2L];
-elseif strcmp(database_id, 'FSI')
-    optionstring=[frequency,'.',countrycode2L,'.',series_id];
-    if nargin==7
-        optionstring=[frequency,'.',countrycode2L,'.',series_id,'.',timeformat];
-    end
 end
 
 if exist('observation_start','var')==1 && exist('observation_end','var')==1 % if specific start and end dates are given
@@ -227,7 +222,7 @@ if isfield(JSONdata.CompactData.DataSet,'Series')
     end
 else
     fprintf('getIMFDATA Warning: You requested some missing data, have returned a nan value. \n')
-    if strcmp(database_id,'IFS') || strcmp(database_id, 'BOP')
+    if strcmp(database_id,'IFS') || strcmp(database_id, 'BOP') || strcmp(database_id, 'FSI')
         fprintf('    Missing: Database: %s , Series: %s , Country: %s \n', database_id_full, series_id, countrycode2L);
     elseif strcmp(database_id,'CPIS')
         fprintf('    Missing: Database: %s , Series: %s , Countries: %s and %s , Sectors: %s and %s \n', database_id_full, series_id, countrycode2L, counterpartycountrycode2L,sector_id,counterpartysector_id);
