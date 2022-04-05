@@ -40,16 +40,16 @@ IMFdata.CAB_Net
 % BOP: Balance of Payments
 
 % Can grab the 'dictionary' for a given database by calling getIMFdata with only the database_id as sole input.
-IFSdictionary=getIMFData('BOP');
+BOPdictionary=getIMFData('BOP');
 
 % Can then look for, e.g., the country code for New Zealand
-[rowIndex,~]=find(contains(IFSdictionary.CountryCodes,'Zealand'));
-IFSdictionary.CountryCodes(rowIndex,:)
+[rowIndex,~]=find(contains(BOPdictionary.CountryCodes,'Zealand'));
+BOPdictionary.CountryCodes(rowIndex,:)
 
 % Can then look for, e.g., the series_id for the total net current account, you can find the formal names from the data.imf.org website 
 % (the following search gives nine results, and the one we want is the eigth)
-[rowIndex,~]=find(contains(IFSdictionary.Variables,'Current Account, Total'));
-Results=IFSdictionary.Variables(rowIndex,:)
+[rowIndex,~]=find(contains(BOPdictionary.Variables,'Current Account, Total'));
+Results=BOPdictionary.Variables(rowIndex,:)
 Results(8,2)
 
 %% Download the US current account and it's components and graph them. 
