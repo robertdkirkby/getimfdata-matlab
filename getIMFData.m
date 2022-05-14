@@ -96,6 +96,7 @@ end
 if nargin==1 % Just return a dictionary for that database
     % /DataStructure/
     JSONdata2 = webread(['http://dataservices.imf.org/REST/SDMX_JSON.svc/DataStructure/',database_id_full]);
+    
     temp=JSONdata2.Structure.CodeLists.CodeList{1}.Code;
     for ii=1:length(temp)
         output.Scale{ii,1}=temp(ii).x_value;
@@ -154,7 +155,7 @@ end
 
 
 % Not just database_id, so an actual data 'series_id' has been requested
-if strcmp(database_id,'IFS') || strcmp(database_id, 'BOP') || strcmp(database_id, 'FSI')
+if strcmp(database_id,'IFS') || strcmp(database_id, 'BOP') || strcmp(database_id, 'FSI') || strcmp(database_id, 'CPI')
     optionstring=[frequency,'.',countrycode2L,'.',series_id];
     if nargin==7
         optionstring=[frequency,'.',countrycode2L,'.',series_id,'.',timeformat];
