@@ -14,7 +14,7 @@
 StartDate_IMF='2000';
 EndDate_IMF='2018';
 IMFdatabase='BOP';
-IMFcountrycode2L='US';
+IMFcountrycode2L='GB';
 IMFfrequency='A'; % A is annual, Q is quarterly, M is monthly
 
 IMFdata.CAB_Net = getIMFData(IMFdatabase, 'BCA_BP6_XDC',IMFcountrycode2L,IMFfrequency,StartDate_IMF,EndDate_IMF);
@@ -95,6 +95,7 @@ IMFdata.CAB_SecondaryIncomeNet = getIMFData(IMFdatabase, 'BIS_BP6_XDC',IMFcountr
 IMFdata.NGDP = getIMFData('IFS', 'NGDP_XDC',IMFcountrycode2L,IMFfrequency,StartDate_IMF,EndDate_IMF);
 
 % Graph using plot
+figure(1)
 plot(IMFdata.CAB_Net.Data(:,1),100*IMFdata.CAB_Net.Data(:,2)./IMFdata.NGDP.Data(:,2))
 hold on
 plot(IMFdata.CAB_ServicesNet.Data(:,1),100*IMFdata.CAB_ServicesNet.Data(:,2)./IMFdata.NGDP.Data(:,2))
@@ -102,21 +103,25 @@ plot(IMFdata.CAB_GoodsNet.Data(:,1),100*IMFdata.CAB_GoodsNet.Data(:,2)./IMFdata.
 plot(IMFdata.CAB_PrimaryIncomeNet.Data(:,1),100*IMFdata.CAB_PrimaryIncomeNet.Data(:,2)./IMFdata.NGDP.Data(:,2))
 plot(IMFdata.CAB_SecondaryIncomeNet.Data(:,1),100*IMFdata.CAB_SecondaryIncomeNet.Data(:,2)./IMFdata.NGDP.Data(:,2))
 hold off
+datetick('x','dd/mmm/yy') % make x-axis display datenum as dd/mmm/yy
+title('UK Current Account Balance')
+ylabel('Percent of GDP')
 
-% Graph using plotly (you must install plotly, it is not default part of Matlab)
-trace_CAB= struct('x', {cellstr(num2str(IMFdata.CAB_Net.Data(:,1)))},'y',100*IMFdata.CAB_Net.Data(:,2)./IMFdata.NGDP.Data(:,2),'name', 'Current Account Balance (Total)','type', 'scatter','marker',struct('size',1),'line',struct('dash','dash'));
-trace1= struct('x', {cellstr(num2str(IMFdata.CAB_ServicesNet.Data(:,1)))},'y',100*IMFdata.CAB_ServicesNet.Data(:,2)./IMFdata.NGDP.Data(:,2),'name', 'Services','type', 'scatter','marker',struct('size',1));
-trace2= struct('x', {cellstr(num2str(IMFdata.CAB_GoodsNet.Data(:,1)))},'y',100*IMFdata.CAB_GoodsNet.Data(:,2)./IMFdata.NGDP.Data(:,2),'name', 'Goods','type', 'scatter','marker',struct('size',1));
-trace3= struct('x', {cellstr(num2str(IMFdata.CAB_PrimaryIncomeNet.Data(:,1)))},'y',100*IMFdata.CAB_PrimaryIncomeNet.Data(:,2)./IMFdata.NGDP.Data(:,2),'name', 'Income','type', 'scatter','marker',struct('size',1));
-trace4= struct('x', {cellstr(num2str(IMFdata.CAB_SecondaryIncomeNet.Data(:,1)))},'y',100*IMFdata.CAB_SecondaryIncomeNet.Data(:,2)./IMFdata.NGDP.Data(:,2),'name', 'Transfers','type', 'scatter','marker',struct('size',1));
-data = {trace_CAB, trace1,trace2,trace3,trace4};
-layout = struct('title', 'USA Current Account Balance','showlegend', true,'width', 800,...
-    'xaxis', struct('domain', [0, 0.9],'title','Year'), ...
-    'yaxis', struct('title', 'Percent of GDP','titlefont', struct('color', 'black'),'tickfont', struct('color', 'black'),'anchor', 'free','side', 'left','position',0),...
-    'legend',struct('x',0.9,'y',0.95));
-response = plotly(data, struct('layout', layout, 'filename', 'USA_CurrentAccountBalance_Components', 'fileopt', 'overwrite'));
-response.data=data; response.layout=layout;
-saveplotlyfig(response, './Graphs/USA_CurrentAccountBalance_Components.pdf')
+
+%% Alternative version of graph using plotly (you must install plotly, it is not default part of Matlab)
+% trace_CAB= struct('x', {cellstr(num2str(IMFdata.CAB_Net.Data(:,1)))},'y',100*IMFdata.CAB_Net.Data(:,2)./IMFdata.NGDP.Data(:,2),'name', 'Current Account Balance (Total)','type', 'scatter','marker',struct('size',1),'line',struct('dash','dash'));
+% trace1= struct('x', {cellstr(num2str(IMFdata.CAB_ServicesNet.Data(:,1)))},'y',100*IMFdata.CAB_ServicesNet.Data(:,2)./IMFdata.NGDP.Data(:,2),'name', 'Services','type', 'scatter','marker',struct('size',1));
+% trace2= struct('x', {cellstr(num2str(IMFdata.CAB_GoodsNet.Data(:,1)))},'y',100*IMFdata.CAB_GoodsNet.Data(:,2)./IMFdata.NGDP.Data(:,2),'name', 'Goods','type', 'scatter','marker',struct('size',1));
+% trace3= struct('x', {cellstr(num2str(IMFdata.CAB_PrimaryIncomeNet.Data(:,1)))},'y',100*IMFdata.CAB_PrimaryIncomeNet.Data(:,2)./IMFdata.NGDP.Data(:,2),'name', 'Income','type', 'scatter','marker',struct('size',1));
+% trace4= struct('x', {cellstr(num2str(IMFdata.CAB_SecondaryIncomeNet.Data(:,1)))},'y',100*IMFdata.CAB_SecondaryIncomeNet.Data(:,2)./IMFdata.NGDP.Data(:,2),'name', 'Transfers','type', 'scatter','marker',struct('size',1));
+% data = {trace_CAB, trace1,trace2,trace3,trace4};
+% layout = struct('title', 'USA Current Account Balance','showlegend', true,'width', 800,...
+%     'xaxis', struct('domain', [0, 0.9],'title','Year'), ...
+%     'yaxis', struct('title', 'Percent of GDP','titlefont', struct('color', 'black'),'tickfont', struct('color', 'black'),'anchor', 'free','side', 'left','position',0),...
+%     'legend',struct('x',0.9,'y',0.95));
+% response = plotly(data, struct('layout', layout, 'filename', 'USA_CurrentAccountBalance_Components', 'fileopt', 'overwrite'));
+% response.data=data; response.layout=layout;
+% saveplotlyfig(response, './Graphs/USA_CurrentAccountBalance_Components.pdf')
 
 
 

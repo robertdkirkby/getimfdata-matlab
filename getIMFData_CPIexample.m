@@ -19,16 +19,6 @@ CPIdata.Variables
 % Similarly, you can see all the country codes looking at 
 CPIdata.CountryCodes
 
-% Set the starting date to Jan-1920 and the end date to the present
-StartDate = datetime('January 1, 1990');
-EndDate= datetime;
-% Create Dates which are all of the months from StartDate to EndDate
-NumOfYears = year(datetime) -year(StartDate);
-Dates = StartDate + calmonths(0:12*(NumOfYears)+(month(datetime)-1));
-DatesNum = datenum(Dates)';
-% Now, create matrix in which to store the results
-MatDataXR = nan(length(Dates), length(CountryName));
-
 % Get the CPI data for US exchange rate
 CPI_US = getIMFData('CPI', 'PCPI_IX','US','M', '1990', '2021');
 % Get the CPI data for UK exchange rate
@@ -40,7 +30,7 @@ CPI_UK = getIMFData('CPI', 'PCPI_IX','GB','M', '1990', '2021');
 figure(1)
 plot(CPI_US.Data(:,1),CPI_US.Data(:,2),CPI_UK.Data(:,1),CPI_UK.Data(:,2))
 datetick('x','yyyy-mm')
-label('USA','United Kingdom')
+legend('USA','United Kingdom')
 title('Consumer Price Index, All Data')
 
 

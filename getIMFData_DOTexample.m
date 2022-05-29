@@ -12,9 +12,8 @@ IMFdatabase='DOT';
 IMFcountrycode2L='US';
 IMFcounterpartycountrycode2L='CN'; % 'World' is an option, 'W00'.
 IMFfrequency='A'; % A is annual, Q is quarterly, M is monthly
-IMFscale='0'; % '0' is units, '3' Thousands, '6' Millions, '9' Billions, etc. See below about downloading dictionary and then "CPISdictionary.Scale" to view full list.
 
-IMFdata.GoodsTradeBalance = getIMFData(IMFdatabase, 'TBG_USD',IMFcountrycode2L,IMFfrequency,StartDate_IMF,EndDate_IMF,IMFcounterpartycountrycode2L);
+IMFdata.GoodsTradeBalance = getIMFData(IMFdatabase, 'TBG_USD',IMFcountrycode2L,IMFfrequency,StartDate_IMF,EndDate_IMF,[],IMFcounterpartycountrycode2L);
 
 % The actual dates and data are kept in:
 IMFdata.GoodsTradeBalance.Data
@@ -52,10 +51,7 @@ DOTdictionary.CountryCodes(rowIndex,:)
 [rowIndex,~]=find(contains(DOTdictionary.Variables,'Value of Trade Balance'));
 Results=DOTdictionary.Variables(rowIndex,:)
 
-% Or just leaf through CPISdictionary and see what you find :)
+% Or just leaf through DOTdictionary and see what you find :)
 DOTdictionary
-
-%% Download the AAA data and graph them. 
-
 
 

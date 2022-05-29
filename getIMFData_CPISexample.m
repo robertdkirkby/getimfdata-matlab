@@ -13,11 +13,10 @@ IMFdatabase='CPIS';
 IMFcountrycode2L='AR';
 IMFcounterpartycountrycode2L='ES'; % 'World' is an option, 'W00'.
 IMFfrequency='A'; % A is annual, Q is quarterly, M is monthly
-IMFscale='0'; % '0' is units, '3' Thousands, '6' Millions, '9' Billions, etc. See below about downloading dictionary and then "CPISdictionary.Scale" to view full list.
 IMFsector='T'; % Total holdings
 IMFcounterpartysector='T'; % Total holdings
 
-IMFdata.AssetsTotal = getIMFData(IMFdatabase, 'I_A_T_T_T_BP6_USD',IMFcountrycode2L,IMFfrequency,StartDate_IMF,EndDate_IMF,IMFcounterpartycountrycode2L,IMFsector,IMFcounterpartysector);
+IMFdata.AssetsTotal = getIMFData(IMFdatabase, 'I_A_T_T_T_BP6_USD',IMFcountrycode2L,IMFfrequency,StartDate_IMF,EndDate_IMF,[],IMFcounterpartycountrycode2L,IMFsector,IMFcounterpartysector);
 
 % The actual dates and data are kept in:
 IMFdata.AssetsTotal.Data
@@ -63,8 +62,5 @@ CPISdictionary.Sector
 % This 'GG', General Government sounds like the sector I am interested in:
 CPISdictionary.Sector(13,:)
 % (Note: 'GG' is the sector_id)
-
-%% Download the AAA data and graph them. 
-
 
 
